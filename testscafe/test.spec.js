@@ -28,7 +28,7 @@ test.skip('locked_out_user | Error message', async t =>  {
  Go through the buy process,
  When the item is bought check if the cart is empty after,
  and then logout (HINT: test should fail) */
-test('problem_user | Login', async t =>  {
+test.skip('problem_user | Login', async t =>  {
   await t
     .typeText("#user-name", "problem_user")
     .typeText("#password", "secret_sauce")
@@ -53,7 +53,31 @@ test('problem_user | Login', async t =>  {
  change the sorting of products 
  to 'Price (Low to High)'
  verify if its correct */
-test.skip('', async t =>  {})
+test('', async t =>  {
+  await t.typeText("#user-name", "standard_user").typeText("#password", "secret_sauce").click("#login-button").click(".product_sort_container");
+
+  const lowToHighSorter = Selector(".product_sort_container").child(2);
+  await t.click(lowToHighSorter);
+  const priceSelector = Selector(".inventory_item_price");
+  const counter = await priceSelector.count;
+
+  let priceArr = [];
+
+  for (let i = 0; i < counter; i++) {
+    let arrElement = await priceSelector.nth(i).innerText;
+    priceArr.push(+arrElement.substring(1));
+  }
+
+  let sortingResult = true;
+
+  priceArr.forEach((el, i, arr) => {
+    if (el > arr[i + 1]) {
+      sortingResult = false;
+    }
+  });
+
+  await t.expect(sortingResult).eql(true);
+})
 
 /* Login with standard_user
  and add the 'Sauce Labs Onesie' item to the cart,

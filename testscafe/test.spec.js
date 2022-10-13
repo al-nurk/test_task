@@ -1,5 +1,7 @@
 /* global fixture */
 
+/* PLEASE INSTALL NEW DEPENDENCIES USING NPM INSTALL */
+
 import { ClientFunction, Selector } from "testcafe";
 import { getPerformanceMetrics } from "@platform-os/testcafe-helpers";
 

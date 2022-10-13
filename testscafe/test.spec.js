@@ -1,6 +1,7 @@
 /* global fixture */
 
 import { ClientFunction, Selector } from 'testcafe'
+import { getPerformanceMetrics } from "@platform-os/testcafe-helpers"
 
 /* The fixture will go to the correct website
 at the login page you will find all the different users and pw for 
@@ -107,7 +108,7 @@ await t.click("#react-burger-menu-btn").click("#logout_sidebar_link");
 
 /* BONUS 1: Use problem_user and see if all
 images render properly. (Hint: test should fail */
-test('problem_user | Images rendering', async t =>  {
+test.skip('problem_user | Images rendering', async t =>  {
   await t.typeText("#user-name", "problem_user").typeText("#password", "secret_sauce").click("#login-button");
 
   const checkCorrectImg = ClientFunction(() => {
@@ -131,4 +132,26 @@ and verify that the website have good performance.
 (Hint: set a threshold, test should fail with
 performance_glitch_user and it should succeed 
 with standard_user */
-test.skip('', async t =>  {})
+test('performance_glitch_user', async t =>  {
+  await t.typeText("#user-name", "performance_glitch_user").typeText("#password", "secret_sauce").click("#login-button");
+
+  const performance = await getPerformanceMetrics({ t });
+  const performanceComputed = performance.computed;
+
+  console.log(`TTFB: ${performanceComputed.ttfb} ms - DOM Ready: ${performanceComputed.domReady} ms`);
+
+  await t.expect(performanceComputed.ttfb).lt(2);
+  await t.expect(performanceComputed.domReady).lt(5);
+})
+
+test("standart_user | Performance", async (t) => {
+  await t.typeText("#user-name", "standard_user").typeText("#password", "secret_sauce").click("#login-button");
+
+  const performance = await getPerformanceMetrics({ t });
+  const performanceComputed = performance.computed;
+
+  console.log(`TTFB: ${performanceComputed.ttfb} ms - DOM Ready: ${performanceComputed.domReady} ms`);
+
+  await t.expect(performanceComputed.ttfb).lt(20);
+  await t.expect(performanceComputed.domReady).lt(70);
+});

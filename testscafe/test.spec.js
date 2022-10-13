@@ -53,7 +53,7 @@ test.skip('problem_user | Login', async t =>  {
  change the sorting of products 
  to 'Price (Low to High)'
  verify if its correct */
-test.skip('', async t =>  {
+test.skip('standard_user | Sorting of products', async t =>  {
   await t.typeText("#user-name", "standard_user").typeText("#password", "secret_sauce").click("#login-button").click(".product_sort_container");
 
   const lowToHighSorter = Selector(".product_sort_container").child(2);
@@ -84,7 +84,7 @@ test.skip('', async t =>  {
  Go through the buy process,
  When the item is bought check if the cart is empty after,
  and then logout */
-test.skip('', async t =>  {
+test.skip('standard_user | Login', async t =>  {
   await t
   .typeText("#user-name", "standard_user")
   .typeText("#password", "secret_sauce")

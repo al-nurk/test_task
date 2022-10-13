@@ -53,7 +53,7 @@ test.skip('problem_user | Login', async t =>  {
  change the sorting of products 
  to 'Price (Low to High)'
  verify if its correct */
-test('', async t =>  {
+test.skip('', async t =>  {
   await t.typeText("#user-name", "standard_user").typeText("#password", "secret_sauce").click("#login-button").click(".product_sort_container");
 
   const lowToHighSorter = Selector(".product_sort_container").child(2);
@@ -84,7 +84,26 @@ test('', async t =>  {
  Go through the buy process,
  When the item is bought check if the cart is empty after,
  and then logout */
-test.skip('', async t =>  {})
+test('', async t =>  {
+  await t
+  .typeText("#user-name", "standard_user")
+  .typeText("#password", "secret_sauce")
+  .click("#login-button")
+  .click("#add-to-cart-sauce-labs-onesie")
+  .click(".shopping_cart_link")
+  .click("#checkout")
+  .typeText("#first-name", "John")
+  .typeText("#last-name", "Smith")
+  .typeText("#postal-code", "11100")
+  .click("#continue")
+  .click("#finish")
+  .click(".shopping_cart_link");
+
+// await t.expect(Selector(".cart_list")).notContains(".cart_item");       // Warnings (1): You passed a Selector object to 't.expect()
+
+await t.expect(Selector(".cart_list").innerText).notContains("Sauce Labs Onesie");
+await t.click("#react-burger-menu-btn").click("#logout_sidebar_link");
+})
 
 /* BONUS 1: Use problem_user and see if all
 images render properly. (Hint: test should fail */

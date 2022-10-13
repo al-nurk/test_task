@@ -9,12 +9,19 @@ fixture `Lets go to SwagLabs and test`
   .page `https://www.saucedemo.com/`
 
 /* Run it and correect this test */
-test('Check the title', async t => {
+test.skip('Check the title', async t => {
   await t.expect(Selector('title').innerText).eql('Swag Labs')
 });
 
 /* Use the locked_out_user and check if you get a error msg */
-test.skip('', async t =>  {})
+test('locked_out_user | Error message', async t =>  {
+  await t.typeText("#user-name", "locked_out_user").typeText("#password", "secret_sauce").click("#login-button");
+
+  const errorMsgOjb = Selector("h3").withAttribute("data-test", "error");
+  const errorMsg = await errorMsgOjb.innerText;
+
+  await t.expect(errorMsg).eql("Epic sadface: Sorry, this user has been locked out.");
+})
 
 /* Login with problem_user
  and add the 'Sauce Labs Onesie' item to the cart,

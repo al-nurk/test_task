@@ -14,7 +14,7 @@ test.skip('Check the title', async t => {
 });
 
 /* Use the locked_out_user and check if you get a error msg */
-test('locked_out_user | Error message', async t =>  {
+test.skip('locked_out_user | Error message', async t =>  {
   await t.typeText("#user-name", "locked_out_user").typeText("#password", "secret_sauce").click("#login-button");
 
   const errorMsgOjb = Selector("h3").withAttribute("data-test", "error");
@@ -28,7 +28,26 @@ test('locked_out_user | Error message', async t =>  {
  Go through the buy process,
  When the item is bought check if the cart is empty after,
  and then logout (HINT: test should fail) */
-test.skip('', async t =>  {})
+test('problem_user | Login', async t =>  {
+  await t
+    .typeText("#user-name", "problem_user")
+    .typeText("#password", "secret_sauce")
+    .click("#login-button")
+    .click("#add-to-cart-sauce-labs-onesie")
+    .click(".shopping_cart_link")
+    .click("#checkout")
+    .typeText("#first-name", "John")
+    .typeText("#last-name", "Smith")
+    .typeText("#postal-code", "11100")
+    .click("#continue")
+    .click("#finish")
+    .click(".shopping_cart_link");
+
+  // await t.expect(Selector(".cart_list")).notContains(".cart_item");       // Warnings (1): You passed a Selector object to 't.expect()
+
+  await t.expect(Selector(".cart_list").innerText).notContains("Sauce Labs Onesie");
+  await t.click("#react-burger-menu-btn").click("#logout_sidebar_link");
+})
 
 /* Login with standard_user
  change the sorting of products 

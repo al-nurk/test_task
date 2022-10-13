@@ -1,6 +1,6 @@
 /* global fixture */
 
-import { Selector } from 'testcafe'
+import { ClientFunction, Selector } from 'testcafe'
 
 /* The fixture will go to the correct website
 at the login page you will find all the different users and pw for 
@@ -84,7 +84,7 @@ test.skip('', async t =>  {
  Go through the buy process,
  When the item is bought check if the cart is empty after,
  and then logout */
-test('', async t =>  {
+test.skip('', async t =>  {
   await t
   .typeText("#user-name", "standard_user")
   .typeText("#password", "secret_sauce")
@@ -107,7 +107,24 @@ await t.click("#react-burger-menu-btn").click("#logout_sidebar_link");
 
 /* BONUS 1: Use problem_user and see if all
 images render properly. (Hint: test should fail */
-test.skip('', async t =>  {})
+test('problem_user | Images rendering', async t =>  {
+  await t.typeText("#user-name", "problem_user").typeText("#password", "secret_sauce").click("#login-button");
+
+  const checkCorrectImg = ClientFunction(() => {
+    const img = document.querySelectorAll("img.inventory_item_img");
+
+    return new Promise((resolve, reject) => {
+      for (let i = 0; i < img.length; i++) {
+        if (img[i] != img[i + 1]) {
+          reject("Image Display Error");
+        }
+      }
+      resolve("Img Correct");
+    });
+  });
+
+  await t.expect(checkCorrectImg()).eql("Img Correct");
+})
 
 /* BONUS 2: Use performance_glitch_user
 and verify that the website have good performance.
